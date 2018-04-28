@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block index %}
+    <div class="layui-body">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+  <legend style="font-weight:bold;font-size: 200%;">服务状态</legend>
+</fieldset>
+    <div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-col-md5">
+        <div class="card">
+      <table class="layui-table" lay-skin="nob">
+  <colgroup>
+    <col width="150">
+    <col width="200">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>系统状态</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="font-weight:bold;">主机名</td>
+      <td style="text-align: left;">op-test</td>
+    </tr>
+    <tr>
+      <td style="font-weight:bold;">nginx版本</td>
+      <td style="text-align: left;">Tengine/2.2.0 (nginx/1.8.1) </td>
+    </tr>
+  <tr>
+      <td style="font-weight:bold;">操作系统</td>
+      <td style="text-align: left;">Linux 3.10.0-327.el7.x86_64</td>
+    </tr>
+  <tr>
+      <td style="font-weight:bold;">监控进程</td>
+      <td style="text-align: left;">运行</td>
+    </tr>
+  <tr>
+      <td style="font-weight:bold;">进程操作</td>
+      <td style="text-align: left;">停止</td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+        </div>
+    <div class="layui-col-md5">
+        <div class="card">
+          <table class="layui-table" lay-skin="nob">
+  <colgroup>
+    <col width="150">
+    <col width="200">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>资源利用</th>
+      <th></th>
+        <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="font-weight:bold;">cpu使用率</td>
+      <td><div class="layui-progress layui-progress-big">
+  <div class="layui-progress-bar" lay-percent="20%"></div>
+</div></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">内存使用率</td>
+      <td><div class="layui-progress layui-progress-big">
+  <div class="layui-progress-bar" lay-percent="20%"></div>
+</div></td>
+    </tr>
+  <tr>
+      <td style="font-weight:bold;">硬盘使用率</td>
+      <td><div class="layui-progress layui-progress-big">
+  <div class="layui-progress-bar" lay-percent="20%"></div>
+</div></td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </div>
+      <div class="layui-row">
+
+          <div class="layui-col-md12">
+              <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+  <legend style="font-weight:bold;font-size: 200%;">topic信息</legend>
+</fieldset>
+              <table class="layui-table" lay-skin="nob">
+  <colgroup>
+    <col width="150">
+    <col width="200">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>topic名称</th>
+      <th>消费者id</th>
+        <th>生产位置</th>
+        <th>消费位置</th>
+        <th>积压</th>
+        <th>预计多久处理完</th>
+        <th>操作</th>
+    </tr>
+  </thead>
+  <tbody id="test">
+  {% for data in topic_info_list %}
+      <tr>
+      <td>{{ data.topic }}</td>
+      <td>{{ data.groupid }}</td>
+      <td>{{ data.logsize_total }}</td>
+      <td>{{ data.offset_total }}</td>
+      <td>{{ data.total_lag }}</td>
+          <td>5分钟</td>
+      <td>关闭告警</td>
+      </tr>
+  {% endfor %}
+  </tbody>
+</table>
+          </div>
+
+      </div>
+  </div>
+
+</div>
+    </div>
+
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    function get_status_info() {
+    jQuery.ajax({
+        type: 'get',
+        url: '/gettopicinfo/',
+        dataType: 'json',
+        success: function(p) {
+            if (p.result) {
+                var str;
+                for(var i=0;i<p.length;i++){
+                                str+="<tr><td>"+ p[i].topic+ "</td><td>" + p[i].groupid + "</td><td>" + p[i].logsize_total + "</td><td>" + p[i].offset_total + "</td><td>" + p[i].total_lag + "</td><td>关闭告警</td>" + "</tr>"
+                            }
+                $("#test").html(str)
+
+            } else  {
+                alert('认证失败！请重新登录！');
+            }
+        }
+    })
+}
+get_status_info();
+window.setInterval(get_status_info, 10000);
+    </script>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block index %}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+      <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+  <legend>kafka_broker配置</legend>
+</fieldset>
+      <blockquote class="layui-elem-quote layui-quote-nm">
+  <form class="layui-form" method="post" action="/kafka_manager">
+      {% csrf_token %}
+  <div class="layui-form-item">
+    <label class="layui-form-label">集群名称</label>
+    <div class="layui-input-block">
+      <input type="text" name="broker_name" required  lay-verify="required" placeholder="请输入集群名称" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+      <div class="layui-form-item">
+    <label class="layui-form-label">集群地址</label>
+    <div class="layui-input-block">
+      <input type="text" name="broker_address" required  lay-verify="required" placeholder="多个以逗号','隔开" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-block">
+      <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+</blockquote>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+  <legend>kafka_broker列表</legend>
+</fieldset>
+  <table class="layui-table">
+  <colgroup>
+    <col width="150">
+    <col width="200">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>集群名称</th>
+      <th>集群地址</th>
+        <th>备注</th>
+        <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for data in kafka_info_list %}
+      <tr>
+        <th>{{ data.broker_name }}</th>
+        <th>{{ data.broker_address }}</th>
+        <th>{{ data.remark }}</th>
+          <th><div class="layui-btn-group"><a href="/kafka_manager_edit?id={{ data.id }}"><button style="margin-right: 5px!important;" class="layui-btn layui-btn-xs">编辑</button></a><a href="/kafka_manager_del?id={{ data.id }}"><button class="layui-btn layui-btn-xs layui-btn-danger">删除</button></a></div></th>
+      </tr>
+  {% endfor %}
+  </tbody>
+</table>
+  </div>
+{% endblock %}

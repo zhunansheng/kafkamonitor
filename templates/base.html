@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>kafka监控后台管理系统</title>
+    {% load staticfiles %}
+  <link rel="stylesheet" href="{% static "css/layui.css" %}">
+    <style>
+        div.card {
+            width: 600px;
+            height: 250px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            text-align: center;
+            margin-left: 25%;
+            margin-right: 25%;
+        }​
+ </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <a href="/"><div class="layui-logo">kafka监控后台管理系统</div></a>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+          admin
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="">基本资料</a></dd>
+          <dd><a href="">安全设置</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="/logout">退了</a></li>
+    </ul>
+  </div>
+
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+    <h1>目录</h1>
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        {% if kafka_selected or topic_selected or db_selected or contact_selected %}
+          <li class="layui-nav-item layui-nav-itemed">
+          {% else %}
+          <li class="layui-nav-item">
+      {% endif %}
+          <a class="" href="javascript:;">配置管理</a>
+          <dl class="layui-nav-child">
+            <dd {% if kafka_selected %} class="layui-this" {% endif %}><a href="/kafka_manager">kafka_broker配置</a></dd>
+            <dd {% if topic_selected %} class="layui-this" {% endif %}><a href="/topic_manager">topic配置</a></dd>
+            <dd {% if db_selected %} class="layui-this" {% endif %}><a href="/db_manager">数据库配置</a></dd>
+              <dd {% if contact_selected %} class="layui-this" {% endif %}><a href="/contact_manager">报警配置</a></dd>
+          </dl>
+        </li>
+      </ul>
+    <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        {% if useradd_selected or userdel_selected or changepass_selected %}
+          <li class="layui-nav-item layui-nav-itemed">
+          {% else %}
+          <li class="layui-nav-item">
+      {% endif %}
+          <a class="" href="javascript:;">用户管理</a>
+          <dl class="layui-nav-child">
+            <dd {% if useradd_selected %} class="layui-this" {% endif %}><a href="/useradd_manager">增加用户</a></dd>
+            <dd {% if userdel_selected %} class="layui-this" {% endif %}><a href="/userdel_manager">删除用户</a></dd>
+            <dd {% if changepass_selected %} class="layui-this" {% endif %}><a href="/changepass_manager">修改密码</a></dd>
+          </dl>
+        </li>
+      </ul>
+    </div>
+  </div>
+  {% block index %}{% endblock %}
+
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © kafka集群管理 - 版本1.0
+  </div>
+</div>
+<script src="{% static "layui.all.js" %}"></script>
+<script>
+//JavaScript代码区域
+layui.use('element', function(){
+  var element = layui.element;
+
+});
+</script>
+{#<script>#}
+{#//Demo#}
+{#layui.use('form', function(){#}
+{#  var form = layui.form;#}
+{##}
+  {#//监听提交#}
+  {#form.on('submit(formDemo)', function(data){#}
+  {#  layer.msg(JSON.stringify(data.field));#}
+  {#  return false;#}
+  {#});#}
+{#});#}
+{#</script>#}
+</body>
+</html>

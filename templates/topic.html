@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block index %}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+      <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+  <legend>topic配置</legend>
+</fieldset>
+      <blockquote class="layui-elem-quote layui-quote-nm">
+  <form class="layui-form" action="/topic_manager" method="post">
+  {% csrf_token %}
+  <div class="layui-form-item">
+    <label class="layui-form-label">topic名称</label>
+    <div class="layui-input-block">
+      <input type="text" name="name" required  lay-verify="required" placeholder="请输入集群名称" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+      <div class="layui-form-item">
+    <label class="layui-form-label">groupid</label>
+    <div class="layui-input-block">
+      <input type="text" name="groupid" required  lay-verify="required" placeholder="多个以逗号','隔开" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+      <div class="layui-form-item">
+    <label class="layui-form-label">积压阈值</label>
+    <div class="layui-input-block">
+      <input type="text" name="lag_threshold" required  lay-verify="required" placeholder="用以推送积压告警判断范围" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+      <div class="layui-form-item">
+    <label class="layui-form-label">kafka集群</label>
+    <div class="layui-input-block">
+      <select name="kafka_broker_name" lay-verify="required">
+          {% for data_kafka in kafka_broker_name_list  %}
+        <option value="{{ data_kafka.broker_name }}">{{ data_kafka.broker_name }}</option>
+          {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">告警推送</label>
+    <div class="layui-input-block">
+      <select name="contact_name_name" lay-verify="required">
+          {% for data in contact_name_list  %}
+        <option value="{{ data.contact_name }}">{{ data.contact_name }}</option>
+          {% endfor %}
+      </select>
+    </div>
+  </div>
+      <div class="layui-form-item">
+    <label class="layui-form-label">分区合并</label>
+    <div class="layui-input-block">
+      <input type="radio" name="partention_merge" value="yes" title="是">
+      <input type="radio" name="partention_merge" value="no" title="否" checked>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">启用</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="switch" lay-skin="switch">
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-block">
+      <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+</blockquote>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+  <legend>topic列表</legend>
+</fieldset>
+  <table class="layui-table">
+  <colgroup>
+    <col width="150">
+    <col width="200">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>topic名称</th>
+      <th>groupid</th>
+        <th>积压阈值</th>
+        <th>kafka集群</th>
+        <th>告警推送</th>
+        <th>是否合并消息</th>
+        <th>是否启用</th>
+        <th>备份</th>
+        <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+
+          {% for data in topic_list %}
+              <tr>
+              <th>{{ data.name }}</th>
+              <th>{{ data.groupid }}</th>
+              <th>{{ data.lag_threshold }}</th>
+              <th>{{ data.kafka_broker_name }}</th>
+              <th>{{ data.contact_name_name }}</th>
+              <th>{{ data.partention_merge }}</th>
+              <th>{{ data.state }}</th>
+              <th>{{ data.remark }}</th>
+          <th><div class="layui-btn-group"><a href="/kafka_manager_edit?id="><button style="margin-right: 5px!important;" class="layui-btn layui-btn-xs">编辑</button></a><a href="/kafka_manager_del?id="><button class="layui-btn layui-btn-xs layui-btn-danger">删除</button></a></div></th>
+          </tr>
+          {% endfor %}
+
+
+  </tbody>
+</table>
+  </div>
+
+{% endblock %}

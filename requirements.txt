@@ -1,0 +1,7 @@
+Django==1.9.7
+pytz==2018.4
+kafka-python
+uuid
+django-uuidfield
+gunicorn
+influxdb
