@@ -7,7 +7,7 @@
 > * 为了后续扩展方便，请大家使用 [Tengine](http://tengine.taobao.org/) 替代 Nginx 服务
 
 ## 项目地址
-- GITHUB - https://github.com/zhunansheng/nanfeng
+- GITHUB - https://github.com/zhunansheng/kafkamonitor
 
 
 ## 更新
@@ -20,7 +20,7 @@
 * 克隆代码
 ```
 mkdir -p /app  
-git clone https://github.com/zhunansheng/nanfeng.git
+git clone https://github.com/zhunansheng/kafkamonitor.git
 cd /app
 
 * 安装 tengine
@@ -71,8 +71,7 @@ http://[IP]:8000/
 ```
 > 首次登陆会要求创建管理员用户，如需修改，可在系统配置中重置管理员用户
 
-## 演示
-![image](readme_img/1.png)
+
 
 ## 授权
 本项目由 [南风](http://nf1.cc) 维护，采用 [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html) 开源协议。欢迎反馈！欢迎贡献代码！
