@@ -15,6 +15,8 @@
 
 ## 功能
 * kafka各个topic监控积压，告警
+## python版本
+* python2.7
 
 ## 运行
 * 克隆代码
