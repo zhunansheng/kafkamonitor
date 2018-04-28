@@ -58,8 +58,52 @@ def login_view(request):
     return render_to_response('login.html', context)
 @login_required(login_url="/login/")
 def index(request):
+    progress_data_tmp = run_shell('supervisorctl  status kafka_shell')
+    logging.info(progress_data_tmp)
+    if progress_data_tmp['output'].find('RUNNING') != -1:
+        kafka_shell_state = 'running'
+    else:
+        kafka_shell_state = 'stopped'
     topic_info_list = json.load(open(r'%s/data_topic_info_web.json' % settings.MEDIA_DIRS, 'r'))
     return render(request, 'index.html',locals())
+@login_required(login_url="/login")
+def progress_switch(request):
+    progress_data_tmp = run_shell('supervisorctl  status kafka_shell')
+    logging.info(progress_data_tmp)
+    if request.GET.get('action','') == 'start':
+        if progress_data_tmp['output'].find('RUNNING') != -1:
+            return HttpResponse('<script>alert(\'当前程序正在运行中\');history.back();</script>')
+        else:
+            state_tmp = run_shell('supervisorctl  start kafka_shell')
+            try:
+                if state_tmp['output'].find('RUNNING') != -1:
+                    return HttpResponse('<script>alert(\'启动成功\');history.back();</script>')
+                else:
+                    return HttpResponse('<script>alert(\'启动失败\');history.back();</script>')
+            except Exception as e:
+                logging.info(e)
+                return HttpResponse('<script>alert(\'启动失败\');history.back();</script>')
+    elif request.GET.get('action','') == 'stop':
+        if progress_data_tmp['output'].find('RUNNING') != -1:
+            run_shell('supervisorctl  stop kafka_shell')
+            state_tmp = run_shell('supervisorctl status kafka_shell')
+            try:
+                if state_tmp['output'].find('STOPPED') != -1:
+                    return HttpResponse('<script>alert(\'停止成功\');history.back();</script>')
+                else:
+                    return HttpResponse('<script>alert(\'停止失败\');history.back();</script>')
+            except Exception as e:
+                return HttpResponse('<script>alert(\'停止失败\');history.back();</script>')
+        else:
+            state_tmp = run_shell('supervisorctl  start kafka_shell')
+            try:
+                if state_tmp['output'].find('RUNNING') != -1:
+                    return HttpResponse('<script>alert(\'启动成功\');history.back();</script>')
+                else:
+                    return HttpResponse('<script>alert(\'启动失败\');history.back();</script>')
+            except Exception as e:
+                logging.info(e)
+                return HttpResponse('<script>alert(\'启动失败\');history.back();</script>')
 
 @login_required(login_url="/login/")
 def gettopicinfo(request):

@@ -35,11 +35,19 @@
     </tr>
   <tr>
       <td style="font-weight:bold;">监控进程</td>
-      <td style="text-align: left;">运行</td>
+      {% if kafka_shell_state == 'running' %}
+          <td id="progress_state" style="text-align: left;color: #00e765">运行中....</td>
+          {% else %}
+      <td id="progress_state" style="text-align: left;color: #ff0522">停止</td>
+      {% endif %}
     </tr>
   <tr>
       <td style="font-weight:bold;">进程操作</td>
-      <td style="text-align: left;">停止</td>
+      {% if kafka_shell_state == 'running' %}
+          <td id="switch_button" style="text-align: left;"><button class="layui-btn layui-btn-sm layui-btn-danger"><a href="/progress_switch?action=stop">停止</a></button></td>
+          {% else %}
+          <td id="switch_button" style="text-align: left;"><button class="layui-btn layui-btn-sm layui-btn-normal"><a href="/progress_switch?action=start">启动</a></button></td>
+      {% endif %}
     </tr>
   </tbody>
 </table>
@@ -149,6 +157,7 @@
         }
     })
 }
+
 get_status_info();
 window.setInterval(get_status_info, 10000);
     </script>

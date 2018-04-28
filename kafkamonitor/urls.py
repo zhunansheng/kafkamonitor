@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^useradd_manager',views.useradd_manager),
     url(r'^userdel_manager',views.userdel_manager),
     url(r'^gettopicinfo', views.gettopicinfo),
+    url(r'^progress_switch',views.progress_switch),
     url(r'^changepass_manager',views.changepass_manager),
     url(r'^test', views.test)
 ]
