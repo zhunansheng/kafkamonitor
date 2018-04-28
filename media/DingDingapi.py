@@ -16,7 +16,7 @@ def send_mess(mess,chat_cmdb_url):
     chat_textmod = {
     "msgtype": "markdown",
     "markdown": {
-        "title": "sql审计平台",
+        "title": "kafka监控系统",
         "text": mess
     }
 }
